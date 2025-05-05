@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 
 /*Route::get('/', function () {
@@ -19,6 +19,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login'); // Rediriger vers la page de connexion après logout
+})->name('logout');
 
 require __DIR__.'/auth.php';
 
