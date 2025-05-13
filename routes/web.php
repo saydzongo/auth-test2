@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PartenaireController;
 
 /*Route::get('/', function () {
     return view('home.index');
@@ -29,3 +30,9 @@ Route::post('/logout', function () {
 require __DIR__.'/auth.php';
 
 Route::get('admin/dashboard',[HomeController::class,'index']);
+Route::resource('partenaires', PartenaireController::class);
+
+Route::get('/admin/partenaires/create', [PartenaireController::class, 'create'])->name('partenaires.create');
+
+Route::resource('partenaires', PartenaireController::class);
+
