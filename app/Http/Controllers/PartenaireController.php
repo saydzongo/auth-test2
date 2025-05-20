@@ -87,10 +87,16 @@ class PartenaireController extends Controller
     
 
 
-     public function edit(Partenaire $partenaire)
+     /*public function edit(Partenaire $partenaire)
      {
+       
         return view('admin.partenaires.edit', compact('partenaire'));
-     }
+     }*/
+
+     public function edit($id) {
+        $partenaire = Partenaire::find($id);
+        return view('admin.partenaires.edit', compact('partenaire'));
+    }
 
 
 public function destroy(Partenaire $partenaire)

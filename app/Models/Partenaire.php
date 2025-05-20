@@ -12,4 +12,5 @@ class Partenaire extends Model
     protected $fillable = [
         'nom', 'domaine', 'lieu', 'email', 'numero', 'image'
     ];
+    protected $table = 'partenaires';
 }

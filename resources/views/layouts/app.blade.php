@@ -28,9 +28,9 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+<main>
+    @yield('content') <!-- Cette ligne permet d'afficher le contenu des vues -->
+</main>
         </div>
     </body>
 </html>

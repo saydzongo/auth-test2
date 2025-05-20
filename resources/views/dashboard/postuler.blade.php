@@ -14,7 +14,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Admin Dashboard</a>
+            <a class="navbar-brand ps-3" href="index.html">Students Dashboard</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -51,21 +51,21 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="{{ route('partenaires.create') }}">
+                            <a class="nav-link" href="{{ route('postuler') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Publier un Partenaire
+                                Postuler a un Stage
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Statut des Stages
+                                Stages
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Touts les Stages</a>
-                                    <a class="nav-link" href="layout-static.html">Stages Validés</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a>
+                                <a class="nav-link" href="{{ route('mes-stages') }}">Mes stages</a>
+                                <!--    <a class="nav-link" href="layout-static.html">Statut de mes stages</a> -->
+                                    <!--<a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a> -->
                                     </nav>
                             </div>
                            
@@ -75,52 +75,37 @@
                 </nav>
             </div> 
             <div id="layoutSidenav_content">
+
                 <main>
                    
-               
-                <div class="container mt-4">
-    <h2>Modifier le partenaire</h2>
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+  
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Postuler à un stage</h2>
 
-    <form action="{{ route('partenaires.update', $partenaire->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        
-        <div class="mb-3">
-            <label for="nom" class="form-label">Nom du partenaire</label>
-            <input type="text" class="form-control" name="nom" value="{{ $partenaire->nom }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="domaine" class="form-label">Domaine</label>
-            <input type="text" class="form-control" name="domaine" value="{{ $partenaire->domaine }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="lieu" class="form-label">Lieu</label>
-            <input type="text" class="form-control" name="lieu" value="{{ $partenaire->lieu }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" value="{{ $partenaire->email }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="numero" class="form-label">Numéro</label>
-            <input type="text" class="form-control" name="numero" value="{{ $partenaire->numero }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Logo</label>
-            <input type="file" class="form-control" name="image">
-        </div>
-        
-        <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
-    </form>
-</div> 
+    <div class="card shadow-sm p-4">
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nom du partenaire</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($partenaires as $partenaire)
+                <tr>
+                    <td>{{ $partenaire->nom }}</td>
+                    <td class="text-center">
+                        <a href="{{ route('stage.create', ['id' => $partenaire->id]) }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-paper-plane"></i> Postuler
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 
-                     
-                            
                                        
                 </main>
 </div>

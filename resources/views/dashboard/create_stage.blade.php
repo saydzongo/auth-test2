@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -14,7 +15,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Admin Dashboard</a>
+            <a class="navbar-brand ps-3" href="index.html">Students Dashboard</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -51,21 +52,21 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="{{ route('partenaires.create') }}">
+                            <a class="nav-link" href="{{ route('postuler') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Publier un Partenaire
+                                Postuler a un Stage
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Statut des Stages
+                                Stages
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Touts les Stages</a>
-                                    <a class="nav-link" href="layout-static.html">Stages Validés</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a>
+                                <a class="nav-link" href="{{ route('mes-stages') }}">Mes stages</a>
+                                    <a class="nav-link" href="layout-static.html">Statut de mes stages</a>
+                                    <!--<a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a> -->
                                     </nav>
                             </div>
                            
@@ -75,52 +76,79 @@
                 </nav>
             </div> 
             <div id="layoutSidenav_content">
-                <main>
+            <main class="ms-5">
                    
-               
-                <div class="container mt-4">
-    <h2>Modifier le partenaire</h2>
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+              
 
-    <form action="{{ route('partenaires.update', $partenaire->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        
-        <div class="mb-3">
-            <label for="nom" class="form-label">Nom du partenaire</label>
-            <input type="text" class="form-control" name="nom" value="{{ $partenaire->nom }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="domaine" class="form-label">Domaine</label>
-            <input type="text" class="form-control" name="domaine" value="{{ $partenaire->domaine }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="lieu" class="form-label">Lieu</label>
-            <input type="text" class="form-control" name="lieu" value="{{ $partenaire->lieu }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" value="{{ $partenaire->email }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="numero" class="form-label">Numéro</label>
-            <input type="text" class="form-control" name="numero" value="{{ $partenaire->numero }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Logo</label>
-            <input type="file" class="form-control" name="image">
-        </div>
-        
-        <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
-    </form>
-</div> 
 
-                     
-                            
+<div class="container-fluid mt-5">
+<div class="card shadow-sm p-4 ms-5">
+    <h2 class="text-center mb-4">Postuler chez {{ $partenaire->nom }}</h2>
+
+    <div class="card shadow-sm p-4">
+        <form action="{{ route('stage.store') }}" method="POST">
+            @csrf
+            
+            <input type="hidden" name="partenaire_id" value="{{ $partenaire->id }}">
+
+            <div class="mb-3">
+                <label for="matricule" class="form-label">Numéro Matricule :</label>
+                <input type="text" name="matricule" class="form-control" value="{{ old('matricule') }}" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="nom" class="form-label">Nom :</label>
+                    <input type="text" name="nom" class="form-control" value="{{ old('nom') }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="prenom" class="form-label">Prénom :</label>
+                    <input type="text" name="prenom" class="form-control" value="{{ old('prenom') }}" required>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Adresse Email :</label>
+                    <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="residence" class="form-label">Résidence :</label>
+                    <input type="text" name="residence" class="form-control" value="{{ old('residence') }}" required>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="campus" class="form-label">Campus :</label>
+                    <input type="text" name="campus" class="form-control" value="{{ old('campus') }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="filiere" class="form-label">Filière :</label>
+                    <input type="text" name="filiere" class="form-control" value="{{ old('filiere') }}" required>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="annee" class="form-label">Année :</label>
+                    <input type="number" name="annee" class="form-control" value="{{ old('annee') }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="periode" class="form-label">Période de Stage :</label>
+                    <input type="text" name="periode" class="form-control" value="{{ old('periode') }}" required>
+                </div>
+            </div>
+
+            
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success px-4">Valider la candidature</button>
+            </div>
+        </form>
+    </div>
+</div>
+    
                                        
                 </main>
 </div>

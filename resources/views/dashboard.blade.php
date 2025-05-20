@@ -51,33 +51,41 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="{{ route('postuler') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Publier un Partenaire
+                                Postuler a un Stage
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Statut des Stages
+                                Stages
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Stages Validés</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a>
-                                </nav>
+                                <a class="nav-link" href="{{ route('mes-stages') }}">Mes stages</a>
+                                    
+                                    <!--<a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a> -->
+                                    </nav>
                             </div>
                            
+                       </div>
+                    </div> 
+                  
+                </nav>
+            </div> 
             <div id="layoutSidenav_content">
                 <main>
                    
-                      
+                <h2>Bienvenue, {{ $user->name }}!</h2>
+<p>Email : {{ $user->email }}</p>
+<p>Date d'inscription : {{ $user->created_at->format('d-m-Y') }}</p>
                      
                             
                                        
-      </main>
+                </main>
 </div>
-
+                
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
