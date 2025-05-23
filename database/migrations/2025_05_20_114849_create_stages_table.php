@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('matricule');
             $table->string('nom');
             $table->string('prenom');
+            $table->string('campus');
             $table->string('email');
             $table->string('residence');
             $table->string('campus');
@@ -36,4 +37,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('stages');
     }
+
+
 };

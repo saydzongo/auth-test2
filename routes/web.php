@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PartenaireController;
 use App\Http\Controllers\StageController;
 
+
 /*Route::get('/', function () {
     return view('home.index');
 });*/
@@ -51,6 +52,25 @@ Route::get('/mes-stages', [StageController::class, 'mesStages'])->middleware(['a
 Route::get('/stage/edit/{id}', [StageController::class, 'edit'])->middleware(['auth'])->name('stage.edit');
 Route::post('/stage/update/{id}', [StageController::class, 'update'])->middleware(['auth'])->name('stage.update');
 Route::delete('/stage/destroy/{id}', [StageController::class, 'destroy'])->middleware(['auth'])->name('stage.destroy');
+
+/*Route::get('/admin/tous-les-stages', [StageController::class, 'tousLesStages'])->middleware(['auth', 'admin'])->name('admin.tous-stages');*/
+
+Route::put('/admin/stage/valider/{id}', [StageController::class, 'valider'])
+    ->middleware(['auth'])
+    ->name('stage.valider');
+
+Route::get('/admin/tous-les-stages', [StageController::class, 'tousLesStages'])
+    ->middleware(['auth'])
+    ->name('admin.tous-stages');
+
+    Route::get('/admin/stages-valides', [StageController::class, 'demandesValidees'])->middleware(['auth'])->name('admin.stages-valides');
+    Route::get('/admin/stages-valides', [StageController::class, 'afficherStagesValides'])->middleware(['auth'])->name('admin.stages-valides');
+
+   /* Route::get('/admin/stages-valides/remettre-en-attente/{id}', [StageController::class, 'remettreEnAttente'])->middleware(['auth'])->name('admin.stages-remettre-en-attente'); */
+    Route::get('/admin/stages/remettre-en-attente/{id}', [StageController::class, 'remettreEnAttente'])->middleware(['auth'])->name('admin.stages-remettre-en-attente');
+
+    Route::get('/stages/export', [StageController::class, 'exportExcel'])->name('stages.export');
+    Route::get('/admin', [HomeController::class, 'index'])->name('admin.index');
 
 
 

@@ -18,8 +18,7 @@
   <!-- end hero area -->
 
   <!-- shop section -->
-
-  @include('home.shopsection')
+  <!--@include('home.shopsection') -->
 
   <!-- end shop section -->
 
@@ -30,8 +29,7 @@
 
 
   <!-- contact section -->
-
-  @include('home.contactsection')
+ <!-- @include('home.contactsection') -->
 
   <!-- end contact section -->
 

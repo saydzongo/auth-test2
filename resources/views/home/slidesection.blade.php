@@ -8,20 +8,21 @@
                   <div class="col-md-7">
                     <div class="detail-box"> 
                       <h1>
-                        Welcome To Our <br>
-                        Gift Shop
+                        Soyez les Bienvenues!
+                         <br>
+                
                       </h1>
                       <p>
-                        Sequi perspiciatis nulla reiciendis, rem, tenetur impedit, eveniet non necessitatibus error distinctio mollitia suscipit. Nostrum fugit doloribus consequatur distinctio esse, possimus maiores aliquid repellat beatae cum, perspiciatis enim, accusantium perferendis.
+                        Sequi perspiciatis nulla reiciendis, rem, </br> tenetur impedit, eveniet non
                       </p>
                       <a href="">
-                        Contact Us
+                        Contactez-nous
                       </a>
                     </div>
                   </div>
                   <div class="col-md-5 ">
                     <div class="img-box">
-                      <img style="width:600px" src="images/image3.jpeg" alt="" />
+                      <img style="width:600px" src="images/imageetd.jpg" alt="" />
                     </div>
                   </div>
                 </div>

@@ -14,7 +14,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Admin Dashboard</a>
+            <a class="navbar-brand ps-3" href="{{ route('admin.index') }}">Admin Dashboard</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -53,19 +53,19 @@
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" href="{{ route('partenaires.create') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Publier un stage
+                                PUBLIER UN STAGE
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Statut des Stages
+                                STAGES
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Touts les Stages</a>
-                                    <a class="nav-link" href="layout-static.html">Stages Validés</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a>
+                                
+                                    <a class="nav-link" href="{{ route('admin.tous-stages') }}">Tous les Stages</a>
+                                    <a class="nav-link" href="{{ route('admin.stages-valides') }}">Stages Validés</a>
                                     </nav>
                             </div>
                            
@@ -77,7 +77,48 @@
             <div id="layoutSidenav_content">
                 <main>
                    
-                      
+                <div class="card shadow-lg p-4 mt-4">
+    <h3 class="text-center text-primary">📊 Statistiques des stages validés</h3>
+    <canvas id="stageChart" width="400" height="200"></canvas>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stats = @json($stats);
+
+        const labels = stats.map(stat => stat.année);
+        const totalDemandes = stats.map(stat => stat.demandes);
+        const totalValides = stats.map(stat => stat.validés);
+
+        const ctx = document.getElementById("stageChart").getContext("2d");
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Demandes",
+                        backgroundColor: "rgba(255, 99, 132, 0.7)",
+                        data: totalDemandes,
+                    },
+                    {
+                        label: "Stages Validés",
+                        backgroundColor: "rgba(54, 162, 235, 0.7)",
+                        data: totalValides,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    });
+</script>
+
+
+</div>     
                      
                             
                                        
@@ -93,5 +134,6 @@
         <script src="{{asset('admincss/assets/demo/chart-bar-demo.js')}}"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="{{asset('admincss/js/datatables-simple-demo.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </body>
 </html>

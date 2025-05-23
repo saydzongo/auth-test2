@@ -77,9 +77,41 @@
             <div id="layoutSidenav_content">
                 <main>
                    
-                <h2>Bienvenue, {{ $user->name }}!</h2>
+            <!--    <h2>Bienvenue, {{ $user->name }}!</h2>
 <p>Email : {{ $user->email }}</p>
-<p>Date d'inscription : {{ $user->created_at->format('d-m-Y') }}</p>
+<p>Date d'inscription : {{ $user->created_at->format('d-m-Y') }}</p> --> 
+
+<div class="card shadow-lg p-4 bg-light border-0 rounded">
+    <div class="card-body text-center">
+        @php
+            $hour = now()->hour;
+            $message = $hour < 12 ? '🌞 Bonjour' : ($hour < 18 ? '🌤️ Bon après-midi' : '🌙 Bonsoir');
+        @endphp
+
+        <h2 class="text-primary fw-bold">
+            {{ $message }}, {{ $user->name }} !
+        </h2>
+        <p class="text-muted mb-3">
+            <i class="fas fa-envelope"></i> {{ $user->email }}
+        </p>
+        <p class="text-muted mb-3">
+            📅 Date d'inscription : <strong>{{ $user->created_at->format('d-m-Y') }}</strong>
+        </p>
+        <hr>
+        <p class="text-secondary">Nous sommes ravis de vous voir ici! 😊</p>
+    </div>
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+</style>
                      
                             
                                        

@@ -10,6 +10,27 @@
         <link href="{{asset('admincss/https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css')}}" rel="stylesheet" />
         <link href="{{asset('admincss/css/styles.css')}}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+
+        <style>
+    .logo-partenaire {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -77,32 +98,28 @@
             <div id="layoutSidenav_content">
 
                 <main>
-                   
-  
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Postuler à un stage</h2>
 
-    <div class="card shadow-sm p-4">
-        <table class="table table-hover table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Nom du partenaire</th>
-                    <th class="text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($partenaires as $partenaire)
-                <tr>
-                    <td>{{ $partenaire->nom }}</td>
-                    <td class="text-center">
-                        <a href="{{ route('stage.create', ['id' => $partenaire->id]) }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-paper-plane"></i> Postuler
-                        </a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                <div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">🌟 Nos Partenaires 🌟</h2>
+
+    <div class="row">
+        @foreach ($partenaires as $partenaire)
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg border-0 rounded p-3 text-center">
+                <div class="text-center">
+                    <img src="{{ Storage::url($partenaire->image) }}" class="img-fluid rounded-circle shadow-sm mb-3 logo-partenaire">
+                    <h5 class="fw-bold text-primary">{{ $partenaire->nom }}</h5>
+                </div>
+                <p class="text-muted"><strong>Domaine :</strong> {{ $partenaire->domaine }}</p>
+                <p class="text-muted"><strong>Lieu :</strong> {{ $partenaire->lieu }}</p>
+                <div class="text-center mt-2">
+                    <a href="{{ route('stage.create', ['id' => $partenaire->id]) }}" class="btn btn-primary btn-sm shadow-sm">
+                        ✏️ Postuler
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
 </div>
 
