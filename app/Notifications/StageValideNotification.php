@@ -10,13 +10,22 @@ use Illuminate\Notifications\Notification;
 class StageValideNotification extends Notification
 {
     use Queueable;
+    public $stage;
+    public $email;
+    public $nom;
+    public $periode;
+    public $partenaire_id;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(public $stage)
+    public function __construct($stage)
     {
-        //
+        $this->stage = $stage;
+        $this->email = $stage->email; 
+        $this->nom = $stage->nom;
+        $this->periode = $stage->periode;
+        $this->partenaire_id = $stage->partenaire_id; // 🔥 Correction ici
     }
 
     /**
@@ -38,10 +47,11 @@ class StageValideNotification extends Notification
             ->subject('Votre stage a été validé!')
             ->greeting("Bonjour {$this->stage->nom},")
             ->line("Votre demande de stage a été validée avec succès.")
-            ->line("Partenaire choisi: {$this->stage->partenaire->nom}")
-            ->line("Période: {$this->stage->periode}")
+            ->line("Partenaire choisi: ID {$this->stage->partenaire_id}")
+            ->line("Période: {$this->periode}")
             ->action('Voir votre stage', url('/stages/'.$this->stage->id))
             ->line('Merci de votre confiance!');
+            
     }
 
     /**

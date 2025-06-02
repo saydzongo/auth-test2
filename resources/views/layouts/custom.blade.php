@@ -10,11 +10,106 @@
         <link href="{{asset('admincss/https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css')}}" rel="stylesheet" />
         <link href="{{asset('admincss/css/styles.css')}}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+
+        <style>
+/* DEBUT STYLE INDEX.BLADE */  
+
+<style>
+.hover-effect {
+    transition: transform 0.3s ease-in-out;
+}
+.hover-effect:hover {
+    transform: scale(1.05);
+}
+
+
+/* FIN STYLE INDEX.BLADE */  
+
+
+          /* DEBUT STYLE POSTULER */           
+
+    .logo-partenaire {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .partenaire-card {
+    padding: 15px;
+    min-height: 260px; /* ✅ Réduction de la hauteur du cadre */
+}
+
+.btn-info {
+    margin-top: 10px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.btn-primary i {
+    font-size: 18px; /* ✅ Ajuste la taille de l’icône */
+    padding: 5px; /* ✅ Ajoute un léger espace autour */
+}
+
+         /*  FIN STYLE POSTULER */ 
+
+
+         /* DEBUT STYLE CREATE PARTENAIRE */
+
+         @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+
+   
+    .logo-partenaire {
+    width: 120px;
+    height: 120px;
+    object-fit: contain; /* Garde l'image entière sans la couper */
+    border-radius: 50%;
+    background-color: #f0f0f0; /* Fond pour images transparentes */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-info {
+    margin-right: 20px;
+}
+
+.btn-warning {
+    margin-right: 20px;
+}
+
+/* FIN STYLE CREATE PARTENAIRE */
+
+
+
+
+
+</style>
+
+
+
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="{{ route('dashboard') }}">Students Dashboard</a>
+            <a class="navbar-brand ps-3" href="{{ route('admin.index') }}"> Dashboard</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -45,115 +140,51 @@
                 </li>
             </ul>
         </nav>
+      
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                             
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="{{ route('postuler') }}">
+
+                        @if(auth()->user() && auth()->user()->role === 'admin')
+                         
+                            <a class="nav-link" href="{{ route('partenaires.create') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Postuler a un Stage
-                            </a>
+                                LISTE DES PARTENAIRES
+                                </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                           <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Stages
+                                STAGES
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route('mes-stages') }}">Mes stages</a>
-                                    
-                                    <!--<a class="nav-link" href="layout-sidenav-light.html">Stages en Attente</a> -->
+                                
+                                    <a class="nav-link" href="{{ route('admin.tous-stages') }}">Tous les Stages</a>
+                                    <a class="nav-link" href="{{ route('admin.stages-valides') }}">Stages Validés</a>
                                     </nav>
-                            </div>
+                                    
+                            </div> 
                            
                        </div>
-                    </div> 
-                  
+                       @endif
+                    </div>                  
                 </nav>
-            </div> 
+            </div>            
             <div id="layoutSidenav_content">
+
+
                 <main>
-           <!--
-
-<div class="card shadow-lg p-4 bg-light border-0 rounded">
-    <div class="card-body text-center">
-        @php
-            $hour = now()->hour;
-            $message = $hour < 12 ? '🌞 Bonjour' : ($hour < 18 ? '🌤️ Bon après-midi' : '🌙 Bonsoir');
-        @endphp
-
-        <h2 class="text-primary fw-bold">
-            {{ $message }}, {{ $user->name }} !
-        </h2>
-        <p class="text-muted mb-3">
-            <i class="fas fa-envelope"></i> {{ $user->email }}
-        </p>
-        <p class="text-muted mb-3">
-            📅 Date d'inscription : <strong>{{ $user->created_at->format('d-m-Y') }}</strong>
-        </p>
-        <hr>
-        <p class="text-secondary">Nous sommes ravis de vous voir ici! 😊</p>
-    </div>
-</div>
-
-<style>
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card {
-        animation: fadeIn 0.8s ease-in-out;
-    }
-</style> -->
-
-    <div class="container">
-        <h2>Bienvenue sur votre tableau de bord</h2>
-
-        {{-- Actions réservées à l'admin --}}
-        @role('admin')
-            <a href="{{ route('admin.tous-stages') }}" class="btn btn-primary">Gérer tous les stages</a>
-            <a href="{{ route('admin.gestion-users') }}" class="btn btn-warning">Gérer les Utilisateurs</a>
-        @endrole
-
-        {{-- Actions réservées à l'étudiant --}}
-        @role('etudiant')
-            <p>Voici vos stages validés :</p>
-            <ul>
-                @foreach($stages as $stage)
-                    <li>{{ $stage->nom }} - {{ $stage->periode }}</li>
-                @endforeach
-            </ul>
-        @endrole
-    </div>
-
-<!--
-
-
-    @if(isset($stages))
-    <ul>
-        @foreach($stages as $stage)
-            <li>{{ $stage->nom }} - {{ $stage->periode }}</li>
-        @endforeach
-    </ul>
-@else
-    <p>Aucun stage trouvé.</p>
-@endif -->
-
-
-
-
-                     
-                            
-                                       
+                @yield('content') <!-- Chaque vue pourra injecter son propre contenu ici -->
+         
                 </main>
-</div>
-                
             </div>
-        </div>
+                
+         <!--   </div> 
+        </div> -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{{asset('admincss/js/scripts.js')}}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -161,5 +192,6 @@
         <script src="{{asset('admincss/assets/demo/chart-bar-demo.js')}}"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="{{asset('admincss/js/datatables-simple-demo.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </body>
 </html>

@@ -11,7 +11,8 @@ class Stage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'partenaire_id', 'matricule', 'nom', 'prenom', 'email', 'residence', 'campus', 'filiere', 'annee', 'periode', 'statut'];
+    protected $fillable = ['user_id', 'partenaire_id', 'matricule', 'nom', 'prenom', 'email', 'residence', 'campus', 
+    'filiere', 'annee', 'periode', 'statut', 'numero_whatsapp', 'commentaire', 'age', 'parent_tuteur', 'numero_tuteur','motif_rejet'];
 
 
     public function partenaire()
@@ -23,6 +24,12 @@ class Stage extends Model
 {
     return $this->belongsTo(User::class, 'user_id');
 }
+
+public function etudiant()
+{
+    return $this->belongsTo(User::class, 'user_id'); // Assure que 'user_id' est la clé étrangère
+}
+
 
 }
 

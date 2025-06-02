@@ -11,17 +11,28 @@ use App\Models\StageHistorique;
 use App\Notifications\StageValideNotification;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StagesExport;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Role;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 
 
 class StageController extends Controller
 {
+    use AuthorizesRequests;
     // Afficher la liste des partenaires
     public function index()
     {
         $partenaires = Partenaire::all();
         return view('dashboard.postuler', compact('partenaires'));
     }
+    
+
+
+
+
 
     // Afficher le formulaire de candidature
     public function create($id)
@@ -50,6 +61,11 @@ class StageController extends Controller
         'annee' => $request->annee,
         'periode' => $request->periode,
         'statut' => 'en attente',
+        'numero_whatsapp' => $request->numero_whatsapp,
+        'commentaire' => $request->commentaire, 
+        'age' => $request->age, 
+        'parent_tuteur' => $request->parent_tuteur, 
+        'numero_tuteur' => $request->numero_tuteur, 
     ]);
 
     return redirect()->route('mes-stages')->with('success', 'Votre candidature a été envoyée!');
@@ -60,11 +76,23 @@ class StageController extends Controller
 
 
 
-public function mesStages()
+/*public function mesStages()
 {
     $stages = Stage::where('user_id', Auth::id())->get(); // Récupérer les candidatures de l'étudiant connecté
     return view('dashboard.mes_stages', compact('stages')); // Afficher la bonne vue
+} */
+public function mesStages()
+{
+    $etudiant = auth()->user();
+    $stages = Stage::where('user_id', $etudiant->id)->get();
+   return view('dashboard.mes_stages', compact('stages'));
 }
+
+
+
+
+
+
 
 
 public function edit($id)
@@ -102,19 +130,28 @@ public function destroy($id)
     return redirect()->route('mes-stages')->with('success', 'Candidature supprimée avec succès!');
 }
 
+
 public function tousLesStages()
 {
+    $this->authorizeForUser(auth()->user(), 'voir tous les stages');
     $stages = Stage::with('partenaire', 'user')->orderBy('created_at', 'desc')->get();
-    $stages = Stage::with('partenaire')->get();
-    return view('admin.tous_les_stages', compact('stages'));   
+    return view('admin.tous_les_stages', compact('stages'));
 }
+
+
+
+
+
+
 
 public function valider($id)
 {
+    // ✅ Récupération du stage
     $stage = Stage::findOrFail($id);
     $stage->update(['statut' => 'validé']);
-   
-    StageValide::create([
+
+    // ✅ Création d'un enregistrement dans `stages_valides`
+    $stage_valide = StageValide::create([
         'stage_id' => $stage->id,
         'matricule' => $stage->matricule,
         'nom' => $stage->nom,
@@ -127,23 +164,31 @@ public function valider($id)
         'partenaire_id' => $stage->partenaire_id,
         'date_validation' => now(),
     ]);
-    $stage->user->notify(new StageValideNotification($stage)); 
-   
+
+    // ✅ Vérification avant notification
+    if (!$stage_valide) {
+        return redirect()->back()->with('error', 'Erreur lors de la validation.');
+    }
+
+    // ✅ Envoi de la notification à l'étudiant
+    Notification::route('mail', $stage_valide->email)
+        ->notify(new StageValideNotification($stage_valide));
 
     return redirect()->route('admin.tous-stages')->with('success', 'La demande de stage a été validée avec succès!');
 }
 
-public function demandesValidees()
+/*public function demandesValidees()
 {
     $stages = Stage::with('partenaire')->where('statut', 'validé')->orderBy('updated_at', 'desc')->get();
     $stages_valides = StageValide::orderBy('date_validation', 'desc')->get();
     return view('admin.stages_valides', compact('stages'));
-}
-/*public function demandesValidees()
+}  */
+
+public function demandesValidees()
 {
-    $stages = Stage::where('statut', 'validé')->orderBy('updated_at', 'desc')->get();
-    return view('admin.stages_valides', compact('stages'));
-}*/
+    $stages_valides = StageValide::orderBy('date_validation', 'desc')->get();
+    return view('admin.stages_valides', compact('stages_valides'));
+}
 
 public function afficherStagesValides()
 {
@@ -153,18 +198,7 @@ public function afficherStagesValides()
 
 
 
-/*public function remettreEnAttente($id)
-{
-    $stage = StageValide::findOrFail($id);
 
-    // Repasser le statut à "en attente" dans la table `stages`
-    Stage::where('id', $stage->stage_id)->update(['statut' => 'en attente']);
-
-    // Supprimer l'enregistrement du stage validé dans `stages_valides`
-    $stage->delete();
-
-    return redirect()->route('admin.stages-valides')->with('success', 'Le stage a été remis en attente.');
-} */
 
 public function remettreEnAttente($id)
 {
@@ -212,10 +246,40 @@ public function changerStatut($id, $nouveauStatut)
 
 public function exportExcel()
 {
-    /*return Excel::download(new StagesExport, 'stages_valides.xlsx'); */
-   /* return Excel::download(new StagesExport, 'stages_valides.csv', \Maatwebsite\Excel\Excel::CSV); */
+    
     return Excel::download(new StagesExport, 'stages_valides.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 }
+
+
+
+public function rejeter(Request $request, $id)
+{
+    $stage = Stage::findOrFail($id);
+    $stage->update([
+        'statut' => 'rejeté',
+        'motif_rejet' => $request->motif_rejet
+    ]);
+
+    return redirect()->route('admin.tous-stages')->with('success', 'Demande de stage rejetée.');
+}
+
+
+
+
+public function filtrer(Request $request)
+{
+    $query = Stage::query();
+
+    if ($request->has('statut') && !empty($request->statut)) {
+        $query->where('statut', $request->statut);
+    }
+
+    $stages = $query->orderBy('statut')->get(); // ✅ Trie par statut pour éviter l'intercalage
+    $html = view('partials.stages_table', compact('stages'))->render();
+
+    return response()->json(['html' => $html]);
+}
+
 
 
     }

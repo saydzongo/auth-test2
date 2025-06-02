@@ -12,6 +12,9 @@ class PartenaireController extends Controller
     public function index()
     {
         //
+        $partenaires = Partenaire::all();
+        return view('admin.partenaires.create', compact('partenaires')); // ✅ Correction ici
+    
     }
 
     /**
@@ -34,17 +37,27 @@ class PartenaireController extends Controller
         'lieu' => 'required|string',
         'email' => 'required|email|unique:partenaires',
         'numero' => 'required|string',
-       /* 'image' => 'nullable|image|max:2048', */
-        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Limite à 2MB et formats compatibles
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'site_web' => 'nullable|string',
+        'localisation' => 'nullable|string',
+        'domaine_recherche' => 'nullable|string',
+        'nombre_places' => 'nullable|integer|min:1',
+        'niveau_recherche' => 'nullable|string',
+        'frais_stage' => 'nullable|numeric|min:0',
     ]);
+    // Vérification des données avant insertion
+    /*dd($data); */
 
     if ($request->hasFile('image')) {
         $data['image'] = $request->file('image')->store('partenaires', 'public');
     }
 
     Partenaire::create($data);
+    
+    $partenaires = Partenaire::select('nom', 'domaine', 'site_web', 'localisation', 'domaine_recherche', 'nombre_places', 'niveau_recherche', 'frais_stage')->get();
 
     return redirect()->route('partenaires.create')->with('success', 'Partenaire ajouté avec succès !');
+    
 }
 
     /**
@@ -55,33 +68,7 @@ class PartenaireController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    
-    /**
-     * Update the specified resource in storage.
-     */
-  /*  public function update(Request $request, Partenaire $partenaire)
-{
-    $data = $request->validate([
-        'nom' => 'required|string',
-        'domaine' => 'required|string',
-        'lieu' => 'required|string',
-        'email' => 'required|email|unique:partenaires,email,' . $partenaire->id,
-        'numero' => 'required|string',
-        'image' => 'nullable|image|max:2048',
-    ]);
-
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('partenaires', 'public');
-    }
-
-    $partenaire->update($data);
-
-    return redirect()->route('partenaires.create')->with('success', 'Partenaire modifié avec succès !');
-} */
-
+   
 public function update(Request $request, $id)
 {
     $request->validate([
@@ -90,22 +77,37 @@ public function update(Request $request, $id)
         'lieu' => 'required|string|max:255',
         'email' => 'required|email|max:255',
         'numero' => 'required|string|max:15',
-        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'site_web' => 'nullable|string',
+        'localisation' => 'nullable|string',
+        'domaine_recherche' => 'nullable|string',
+        'nombre_places' => 'nullable|integer|min:1',
+        'niveau_recherche' => 'nullable|string',
+        'frais_stage' => 'nullable|numeric|min:0',
     ]);
 
     $partenaire = Partenaire::findOrFail($id);
+        $partenaire->update($request->all());
+
+    /*$partenaire = Partenaire::findOrFail($id);
     $partenaire->nom = $request->nom;
     $partenaire->domaine = $request->domaine;
     $partenaire->lieu = $request->lieu;
     $partenaire->email = $request->email;
     $partenaire->numero = $request->numero;
+    $partenaire->site_web = $request->site_web;
+    $partenaire->localisation = $request->localisation;
+    $partenaire->domaine_recherche = $request->domaine_recherche;
+    $partenaire->nombre_places = $request->nombre_places;
+    $partenaire->niveau_recherche = $request->niveau_recherche;
+    $partenaire->frais_stage = $request->frais_stage;
+    $partenaire->save();*/
 
     if ($request->hasFile('image')) {
         $imagePath = $request->file('image')->store('partenaires', 'public');
         $partenaire->image = $imagePath;
+        $partenaire->save();
     }
-
-    $partenaire->save();
 
     return redirect()->back()->with('success', 'Partenaire modifié avec succès!');
 }
@@ -129,9 +131,17 @@ public function update(Request $request, $id)
     }
 
 
-public function destroy(Partenaire $partenaire)
+/*public function destroy(Partenaire $partenaire)
 {
     $partenaire->delete();
     return redirect()->route('partenaires.create')->with('success', 'Partenaire supprimé avec succès !');
+} */
+public function destroy($id)
+{
+    $partenaire = Partenaire::findOrFail($id);
+    $partenaire->delete();
+   
+    return redirect()->route('admin.partenaires.create')->with('success', 'Partenaire supprimé avec succès!');
 }
+
 }
