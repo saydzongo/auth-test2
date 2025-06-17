@@ -61,6 +61,30 @@
                 </div>
             </div>
 
+            @if ($partenaire->type_stage == 'payant')
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <label for="numero_payment" class="form-label">Numéro de paiement :</label>
+            <input type="text" name="numero_payment" class="form-control" value="{{ old('numero_payment') }}">
+        </div>
+        <div class="col-md-6">
+            <label for="code_payment" class="form-label">Code de paiement :</label>
+            <input type="text" name="code_payment" class="form-control" value="{{ old('code_payment') }}">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <label for="capture_payment" class="form-label">Capture du paiement :</label>
+            <input type="file" name="capture_payment" class="form-control">
+        </div>
+    </div>
+@endif
+
+                <div class="form-group">
+    <label for="commentaire">Commentaire</label>
+    <textarea name="commentaire" class="form-control" rows="4" placeholder="Ajoutez vos remarques..."></textarea>
+</div>
+
     
 
             <div class="text-center mt-4">

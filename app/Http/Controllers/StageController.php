@@ -41,12 +41,39 @@ class StageController extends Controller
         return view('dashboard.create_stage', compact('partenaire'));
     }
 
+
+
     // Enregistrer la candidature en base de données
     public function store(Request $request)
 {
-    $request->validate([
+   /* $request->validate([
         'partenaire_id' => 'required|exists:partenaires,id',
-    ]);
+    ]); */
+
+
+    // ✅ Vérifier que `partenaire_id` est bien envoyé
+    if (!$request->partenaire_id) {
+        return back()->with('error', 'Partenaire ID est manquant!');
+    }
+
+    // ✅ Récupérer le partenaire
+    $partenaire = Partenaire::find($request->partenaire_id);
+    if (!$partenaire) {
+        return back()->with('error', 'Partenaire introuvable!');
+    }
+
+
+     // ✅ Récupérer l'utilisateur connecté
+     $userId = auth()->id(); 
+
+  // ✅ Récupérer les infos du partenaire
+  $partenaire = Partenaire::find($request->partenaire_id);
+    
+  if (!$partenaire) {
+      return back()->with('error', 'Partenaire introuvable!');
+  }
+
+
 
     Stage::create([
         'user_id' => Auth::id(),
@@ -66,7 +93,42 @@ class StageController extends Controller
         'age' => $request->age, 
         'parent_tuteur' => $request->parent_tuteur, 
         'numero_tuteur' => $request->numero_tuteur, 
+
+         /* 'numero_payment' => 'nullable|string|max:255',
+        'code_payment' => 'nullable|string|max:255',
+        'capture_payment' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+      'numero_payment' => $request->type_stage === 'payant' ? 'nullable|string|max:255' : 'nullable',
+        'code_payment' => $request->type_stage === 'payant' ? 'nullable|string|max:255' : 'nullable',
+        'capture_payment' => $request->type_stage === 'payant' ? 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' : 'nullable',
+        */
+        'numero_payment' => $partenaire->type_stage === 'payant' ? $request->numero_payment : null,
+        'code_payment' => $partenaire->type_stage === 'payant' ? $request->code_payment : null,
+        'capture_payment' => $partenaire->type_stage === 'payant' && $request->hasFile('capture_payment') 
+            ? $request->file('capture_payment')->store('captures', 'public') 
+            : null,    
+    
     ]);
+
+    // ✅ Utiliser `type_stage` du partenaire directement
+    $data['type_stage'] = $partenaire->type_stage;
+
+    // ✅ Enregistrer la capture correctement (uniquement si elle est envoyée)
+    if ($request->hasFile('capture_payment')) {
+        $data['capture_payment'] = $request->file('capture_payment')->store('captures', 'public');
+    }
+
+
+/* // ✅ Ajouter `user_id` automatiquement
+$data['user_id'] = $userId;
+$data['partenaire_id'] = $request->partenaire_id; // ✅ Ajout de `partenaire_id`
+
+// ✅ Stocker correctement `type_stage`
+$data['type_stage'] = $partenaire->type_stage;
+
+// ✅ Enregistrer la demande de stage avec les bonnes valeurs
+Stage::create($data);  */
+
+    
 
     return redirect()->route('mes-stages')->with('success', 'Votre candidature a été envoyée!');
 }

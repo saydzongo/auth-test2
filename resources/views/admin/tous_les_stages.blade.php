@@ -17,6 +17,7 @@
                         <th>Prénom</th>
                         <th>Filière</th>
                         <th>Statut</th>
+                        <th>Type de stage</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -28,12 +29,22 @@
                         <td>{{ $stage->nom }}</td>
                         <td>{{ $stage->prenom }}</td>
                         <td>{{ $stage->filiere }}</td>
+                         
                         <td>
                             <span class="badge 
                                 {{ $stage->statut == 'en attente' ? 'bg-warning' : ($stage->statut == 'validé' ? 'bg-success' : 'bg-danger') }}">
                                 {{ ucfirst($stage->statut) }}
                             </span>
                         </td>
+
+                        <td class="{{ $stage->partenaire->type_stage == 'payant' ? 'text-danger' : 'text-success' }}">
+                            {{ $stage->partenaire->type_stage == 'payant' ? '💰 Payant' : '🎓 Gratuit' }}
+                        </td>
+
+
+
+
+
                         <td class="text-center">
                             @if ($stage->statut == 'en attente')
                                 <form action="{{ route('stage.valider', ['id' => $stage->id]) }}" method="POST" style="display:inline;">
@@ -60,10 +71,14 @@
                             @endif
                         </td>
 
-                        <td class="text-center">
+                       <td class="text-center">
                             <button class="btn btn-info btn-sm" onclick="toggleDetails({{ $stage->id }})">
                                 <i class="fas fa-plus-circle"></i>
                             </button>
+                            
+                   
+
+ 
 
                             <div id="details-{{ $stage->id }}" style="display: none; padding:10px; border:1px solid #ddd; background:#f9f9f9;">
                             <p><strong>Matricule :</strong> {{ $stage->matricule }}</p>
@@ -75,6 +90,22 @@
                                 <p><strong>Filière :</strong> {{ $stage->filiere }}</p>
                                 <p><strong>Année :</strong> {{ $stage->annee }}</p>
                                 <p><strong>Période de Stage :</strong> {{ $stage->periode }}</p>
+
+                                <p><strong>Numéro de paiement :</strong> {{ $stage->numero_payment }}</p>
+                                <p><strong>Code de paiement :</strong> {{ $stage->code_payment }}</p>
+                                
+                                @if ($stage->capture_payment)
+                              <p>
+                                 <a href="{{ asset('storage/' . $stage->capture_payment) }}" class="btn btn-dark btn-sm" download>
+                                 📷 Télécharger la capture de paiement
+                                 </a>
+                              </p>
+                                @else
+                                    <p class="text-muted">📷 Aucune capture disponible</p>
+                                @endif
+           
+
+
                                 <p><strong>Partenaire :</strong> {{ $stage->partenaire->nom }}</p>
                                 <p><strong>Numéro WhatsApp :</strong> {{ $stage->numero_whatsapp }}</p>
                                 <p><strong>Commentaire :</strong> {{ $stage->commentaire }}</p>
@@ -114,6 +145,14 @@
         let details = document.getElementById('details-' + id);
         details.style.display = details.style.display === "none" ? "block" : "none";
     }
+
+
+    
+function toggleDetails(id) {
+    let details = document.getElementById('details-' + id);
+    details.style.display = details.style.display === "none" ? "table-row" : "none";
+}
+
     </script>
 @endsection
 

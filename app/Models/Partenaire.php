@@ -21,6 +21,7 @@ class Partenaire extends Model
         'domaine_recherche', 
         'nombre_places', 
         'niveau_recherche', 
+         'type_stage',
         'frais_stage'
     ];
     protected $table = 'partenaires';

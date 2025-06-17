@@ -27,6 +27,9 @@
                         <img src="{{ Storage::url($partenaire->image) }}" class="img-fluid rounded-circle shadow-sm mb-3 logo-partenaire">
                         <h5 class="fw-bold text-primary">{{ $partenaire->nom }}</h5>
                         <p class="text-muted"><strong>Domaine :</strong> {{ $partenaire->domaine }}</p>
+                        <p class="fw-bold {{ $partenaire->type_stage == 'payant' ? 'text-danger' : 'text-success' }}">
+                               {{ $partenaire->type_stage == 'payant' ? '💰 Stage Payant' : '🎓 Stage Gratuit' }}
+                        </p>
                     </div>
 
                    
@@ -40,7 +43,7 @@
                         <p><strong>Domaine recherché :</strong> {{ $partenaire->domaine_recherche ?? 'Non spécifié' }}</p>
                         <p><strong>Places :</strong> {{ $partenaire->nombre_places ?? '0' }}</p>
                         <p><strong>Niveau requis :</strong> {{ $partenaire->niveau_recherche ?? 'Non spécifié' }}</p>
-                        <p><strong>Frais :</strong> {{ $partenaire->frais_stage ?? '0' }} €</p>
+                        <p><strong>Frais :</strong> {{ $partenaire->frais_stage ?? '0' }} Fcfa</p>
                     </div>
 
                     <div class="text-center mt-2">

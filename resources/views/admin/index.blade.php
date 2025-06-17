@@ -55,6 +55,8 @@
             <i class="fas fa-briefcase fa-3x text-primary"></i>
             <h4 class="mt-2">Faire une Demande</h4>
             <p><strong>{{ $nombrePartenaires }}</strong> partenaires disponibles</p>
+            <p class="text-muted">💰 Stages payants : <strong>{{ $nombreStagesPayants }}</strong></p>
+            <p class="text-muted">🎓 Stages gratuits : <strong>{{ $nombreStagesGratuits }}</strong></p>            
             <a href="{{ route('postuler') }}" class="btn btn-primary mt-2">Postuler</a>
         </div>
     </div>

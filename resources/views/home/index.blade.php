@@ -20,6 +20,7 @@
             align-items: center;
             height: 100vh;
             background-image: url('/images/etudiant2.jpg'); /* ✅ Remplace par ton image */
+            background-size: 50%;
             background-size: cover;
             background-position: center;
         }
@@ -74,9 +75,32 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        .welcome-box {
+    font-size: 40px; /* ✅ Augmenté pour être plus visible */
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    background: white;
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
     </style>
 </head>
 <body>
+
+<div class="welcome-box">
+    <span id="welcome-text"></span><span class="cursor">|</span>
+</div>
 
     <!-- ✅ Formulaire de connexion -->
     <div class="login-box">
@@ -94,6 +118,27 @@
                 <a href="{{ route('password.request') }}" class="forgot-password-btn">Mot de passe oublié?</a>
         </div>
     </div>
+
+
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    let text = "SOYEZ LES BIENVENUS SUR NOTRE PLATEFORME!!";
+    let i = 0;
+    let speed = 100; // ✅ Ajuste la vitesse ici (100ms par lettre)
+
+    function typeEffect() {
+        if (i < text.length) {
+            document.getElementById("welcome-text").textContent += text.charAt(i);
+            i++;
+            setTimeout(typeEffect, speed);
+        }
+    }
+
+    typeEffect();
+});
+</script>
 
 </body>
 </html>

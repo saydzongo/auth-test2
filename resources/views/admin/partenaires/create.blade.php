@@ -82,16 +82,22 @@
                         <input type="number" class="form-control" name="nombre_places" id="nombre_places" required>
                     </div>
                 </div>
+
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="niveau_recherche" class="form-label">Niveau recherché</label>
-                        <input type="text" class="form-control" name="niveau_recherche" id="niveau_recherche" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="frais_stage" class="form-label">Frais de stage (€)</label>
-                        <input type="number" class="form-control" name="frais_stage" id="frais_stage">
-                    </div>
-                </div>
+                         <div class="col-md-6 mb-3">
+                             <label for="type_stage" class="form-label">Type de stage :</label>
+                             <select id="type_stage" name="type_stage" class="form-control" onchange="toggleFraisStage()">
+                                 <option value="gratuit">Gratuit</option>
+                                 <option value="payant">Payant</option>
+                             </select>
+                         </div>
+
+                         <div class="col-md-6 mb-3" id="frais_stage_box" style="display: none;">
+                             <label for="frais_stage" class="form-label">Frais de stage (€)</label>
+                             <input type="number" id="frais_stage" name="frais_stage" class="form-control" placeholder="Montant en €">
+                         </div>
+                     </div>
+                
 
         
 
@@ -132,7 +138,8 @@
             <p><strong>Domaine recherché :</strong> {{ $partenaire->domaine_recherche }}</p>
             <p><strong>Places :</strong> {{ $partenaire->nombre_places }}</p>
             <p><strong>Niveau requis :</strong> {{ $partenaire->niveau_recherche }}</p>
-            <p><strong>Frais :</strong> {{ $partenaire->frais_stage }} €</p>
+            <p><strong>Type de stage :</strong> {{ $partenaire->type_stage }} </p>
+            <p><strong>Frais :</strong> {{ $partenaire->frais_stage }} Fcfa</p>
             </div>
 
             <div class="text-center">
@@ -157,6 +164,7 @@
                             '{{ $partenaire->domaine_recherche }}',
                             '{{ $partenaire->nombre_places }}',
                             '{{ $partenaire->niveau_recherche }}',
+                            '{{ $partenaire->type_stage }}',
                             '{{ $partenaire->frais_stage }}'
                         )"><i class="fas fa-edit"></i></a>
 
@@ -165,7 +173,7 @@
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmSuppression('{{ route('partenaires.destroy', $partenaire->id) }}')">
-                       <i class="fas fa-trash-alt"></i> Supprimer
+                       <i class="fas fa-trash-alt"></i> 
                     </button>
                     </button>
                 </form>
@@ -260,6 +268,25 @@ function confirmSuppression(url) {
         }
     });
 }
+
+
+function toggleFraisStage() {
+    let typeStage = document.getElementById("type_stage").value;
+    let fraisStageBox = document.getElementById("frais_stage_box");
+
+    if (typeStage === "payant") {
+        fraisStageBox.style.display = "block"; 
+        fraisStageBox.style.opacity = "1"; 
+        fraisStageBox.style.transition = "opacity 0.5s ease-in-out";
+    } else {
+        fraisStageBox.style.opacity = "0"; 
+        setTimeout(() => { fraisStageBox.style.display = "none"; }, 500);
+        document.getElementById("frais_stage").value = ""; 
+    }
+}
+
+
+
 </script>
 
 

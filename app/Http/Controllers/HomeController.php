@@ -27,6 +27,8 @@ class HomeController extends Controller
         $user = Auth::user(); // ✅ Récupération de l'utilisateur connecté
 
         // ✅ Récupération des statistiques des stages et partenaires
+        $nombreStagesPayants = Partenaire::where('type_stage', 'payant')->count();
+        $nombreStagesGratuits = Partenaire::where('type_stage', 'gratuit')->count();
         $nombreEnAttente = Stage::where('user_id', $user->id)->where('statut', 'en attente')->count();
         $nombreValides = Stage::where('user_id', $user->id)->where('statut', 'validé')->count();
         $nombreRejetes = Stage::where('user_id', $user->id)->where('statut', 'rejeté')->count();
@@ -61,7 +63,7 @@ class HomeController extends Controller
 
         return view('admin.index', compact(
             'user', 'nombrePartenaires', 'nombreStages', 'nombreStagesValides',
-            'nombreStagesEnAttente', 'nombreStagesRejetes', 'stages', 'stats', 'nombreDemandes', 'nombreEnAttente', 'nombreValides', 'nombreRejetes'
+            'nombreStagesEnAttente', 'nombreStagesRejetes', 'stages', 'stats', 'nombreDemandes', 'nombreEnAttente', 'nombreValides', 'nombreRejetes', 'nombreStagesPayants', 'nombreStagesGratuits'
         
         ));
 

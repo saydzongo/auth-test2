@@ -31,6 +31,7 @@ class PartenaireController extends Controller
      */
     public function store(Request $request)
 {
+   
     $data = $request->validate([
         'nom' => 'required|string',
         'domaine' => 'required|string',
@@ -43,7 +44,9 @@ class PartenaireController extends Controller
         'domaine_recherche' => 'nullable|string',
         'nombre_places' => 'nullable|integer|min:1',
         'niveau_recherche' => 'nullable|string',
-        'frais_stage' => 'nullable|numeric|min:0',
+        'type_stage' => 'required|string', 
+        'frais_stage' => $request->type_stage === 'payant' ? 'required|numeric|min:0' : '',
+        /*'frais_stage' => 'nullable|numeric|min:0', */
     ]);
     // Vérification des données avant insertion
     /*dd($data); */

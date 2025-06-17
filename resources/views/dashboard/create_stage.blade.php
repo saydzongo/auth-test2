@@ -17,7 +17,7 @@
     <h2 class="text-center mb-4">Postuler chez {{ $partenaire->nom }}</h2>
 
     <div class="card shadow-sm p-4">
-        <form action="{{ route('stage.store') }}" method="POST">
+        <form action="{{ route('stage.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <input type="hidden" name="partenaire_id" value="{{ $partenaire->id }}">
@@ -93,6 +93,36 @@
                     <label for="periode" class="form-label">Période de Stage :</label>
                     <input type="text" name="periode" class="form-control" value="{{ old('periode') }}" required>
              </div>
+             </div>
+
+            <!-- ✅ Affichage du type de stage (récupéré de la BDD) -->
+            <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Type de stage :</label>
+                        <input type="text" class="form-control" value="{{ $partenaire->type_stage }}" disabled>
+                        <input type="hidden" name="type_stage" value="{{ $partenaire->type_stage }}">
+                    </div>
+                </div>
+
+                <!-- ✅ Champs de paiement (s’affichent uniquement si stage "Payant") -->
+                @if ($partenaire->type_stage == 'payant')
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <label for="numero_payment" class="form-label">Numéro de paiement :</label>
+            <input type="text" name="numero_payment" class="form-control" value="{{ old('numero_payment') }}">
+        </div>
+        <div class="col-md-6">
+            <label for="code_payment" class="form-label">Code de paiement :</label>
+            <input type="text" name="code_payment" class="form-control" value="{{ old('code_payment') }}">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <label for="capture_payment" class="form-label">Capture du paiement :</label>
+            <input type="file" name="capture_payment" class="form-control">
+        </div>
+    </div>
+@endif
                 <div class="form-group">
     <label for="commentaire">Commentaire</label>
     <textarea name="commentaire" class="form-control" rows="4" placeholder="Ajoutez vos remarques..."></textarea>
@@ -107,6 +137,26 @@
         </form>
     </div>
 </div>
+
+
+<script>
+function togglePaymentFields() {
+    let typeStage = document.getElementById("type_stage").value;
+    let paymentFields = document.getElementById("paymentFields");
+
+    if (typeStage === "payant") {
+        paymentFields.style.display = "block"; 
+        paymentFields.style.opacity = "1"; 
+        paymentFields.style.transition = "opacity 0.5s ease-in-out";
+    } else {
+        paymentFields.style.opacity = "0"; 
+        setTimeout(() => { paymentFields.style.display = "none"; }, 500);
+        document.getElementById("numero_payment").value = "";
+        document.getElementById("code_payment").value = "";
+        document.getElementById("capture_payment").value = "";
+    }
+}
+</script>
     
                                        
 @endsection
