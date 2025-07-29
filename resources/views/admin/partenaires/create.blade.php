@@ -81,6 +81,10 @@
                         <label for="nombre_places" class="form-label">Nombre de places</label>
                         <input type="number" class="form-control" name="nombre_places" id="nombre_places" required>
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="nombre_places" class="form-label">Niveu recquis</label>
+                        <input type="number" class="form-control" name="niveau_recherche" id="niveau_recherche" required>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -125,7 +129,7 @@
                 <p class="text-muted"><strong>Domaine :</strong> {{ $partenaire->domaine }}</p>
             </div>
 
-            
+          
 
             <div id="details-{{ $partenaire->id }}" style="display: none;">
 
@@ -141,6 +145,8 @@
             <p><strong>Type de stage :</strong> {{ $partenaire->type_stage }} </p>
             <p><strong>Frais :</strong> {{ $partenaire->frais_stage }} Fcfa</p>
             </div>
+  
+
 
             <div class="text-center">
     <!-- Icône "+" pour afficher les détails -->
@@ -151,7 +157,7 @@
 
 
 
-            <a href="#" class="btn btn-warning btn-sm" onclick="remplirFormulaire(
+          <!--  <a href="#" class="btn btn-warning btn-sm" onclick="remplirFormulaire(
                             '{{ $partenaire->id }}', 
                             '{{ $partenaire->nom }}', 
                             '{{ $partenaire->domaine }}', 
@@ -166,7 +172,11 @@
                             '{{ $partenaire->niveau_recherche }}',
                             '{{ $partenaire->type_stage }}',
                             '{{ $partenaire->frais_stage }}'
-                        )"><i class="fas fa-edit"></i></a>
+                        )"><i class="fas fa-edit"></i></a> -->
+
+                        <a href="{{ route('partenaires.edit', $partenaire->id) }}" class="btn btn-warning btn-sm">
+                                       <i class="fas fa-edit"></i>
+                           </a>
 
                 
                 <form action="{{ route('partenaires.destroy', $partenaire->id) }}" method="POST" style="display:inline;">
@@ -197,7 +207,8 @@ function toggleDetails(id) {
     }
     
 
-    function remplirFormulaire(id, nom, domaine, lieu, email, numero, imageUrl) {
+    function remplirFormulaire(id, nom, domaine, lieu, email, numero, site_web, localisation, domaine_recherche, 
+    nombre_places, niveau_recherche, imageUrl, frais_stage) {
         afficherFormulaire();
 
         document.getElementById('partenaireId').value = id;
@@ -222,6 +233,10 @@ function toggleDetails(id) {
     document.getElementById('logoPreview').style.display = 'none';
 }
         document.getElementById('formPartenaireAction').action = `/partenaires/${id}/update`;
+
+        document.getElementById('type_stage').value = type_stage;
+toggleFraisStage(); // mise à jour dynamique des frais si payant
+
     }
 
     function afficherFormulaire() {

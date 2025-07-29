@@ -99,6 +99,17 @@
 
 
 
+ /* DEBUT STYLE EDIT PARTENAIRE */
+
+
+
+
+
+
+ /* FIN STYLE EDIT PARTENAIRE */
+
+
+
 
 
 </style>

@@ -112,8 +112,11 @@ public function update(Request $request, $id)
         $partenaire->save();
     }
 
-    return redirect()->back()->with('success', 'Partenaire modifié avec succès!');
-}
+    return redirect()->route('partenaires.create')->with('success', 'Partenaire modifié avec succès!');
+
+   
+   
+   }
 
 
     /**

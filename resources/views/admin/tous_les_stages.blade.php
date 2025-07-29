@@ -75,10 +75,6 @@
                             <button class="btn btn-info btn-sm" onclick="toggleDetails({{ $stage->id }})">
                                 <i class="fas fa-plus-circle"></i>
                             </button>
-                            
-                   
-
- 
 
                             <div id="details-{{ $stage->id }}" style="display: none; padding:10px; border:1px solid #ddd; background:#f9f9f9;">
                             <p><strong>Matricule :</strong> {{ $stage->matricule }}</p>
@@ -90,6 +86,13 @@
                                 <p><strong>Filière :</strong> {{ $stage->filiere }}</p>
                                 <p><strong>Année :</strong> {{ $stage->annee }}</p>
                                 <p><strong>Période de Stage :</strong> {{ $stage->periode }}</p>
+v4bn78
+                                <p><strong>Partenaire :</strong> {{ $stage->partenaire->nom }}</p>
+                                <p><strong>Numéro WhatsApp :</strong> {{ $stage->numero_whatsapp }}</p>
+                                <p><strong>Commentaire :</strong> {{ $stage->commentaire }}</p>
+                                <p><strong>Âge :</strong> {{ $stage->age }}</p>
+                                <p><strong>Parent ou Tuteur :</strong> {{ $stage->parent_tuteur }}</p>
+                                <p><strong>Numéro Tuteur :</strong> {{ $stage->numero_tuteur }}</p>
 
                                 <p><strong>Numéro de paiement :</strong> {{ $stage->numero_payment }}</p>
                                 <p><strong>Code de paiement :</strong> {{ $stage->code_payment }}</p>
@@ -103,15 +106,7 @@
                                 @else
                                     <p class="text-muted">📷 Aucune capture disponible</p>
                                 @endif
-           
 
-
-                                <p><strong>Partenaire :</strong> {{ $stage->partenaire->nom }}</p>
-                                <p><strong>Numéro WhatsApp :</strong> {{ $stage->numero_whatsapp }}</p>
-                                <p><strong>Commentaire :</strong> {{ $stage->commentaire }}</p>
-                                <p><strong>Âge :</strong> {{ $stage->age }}</p>
-                                <p><strong>Parent ou Tuteur :</strong> {{ $stage->parent_tuteur }}</p>
-                                <p><strong>Numéro Tuteur :</strong> {{ $stage->numero_tuteur }}</p>
                             </div>
                         </td>
 
