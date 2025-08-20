@@ -4,7 +4,16 @@
 
 @section('content')
 
+
+
+
     <div class="container mt-5">
+
+    <!-- 📊 Graphique des statuts -->
+<div class="card mb-4 p-4 shadow-sm">
+    <h5 class="text-center mb-3">Répartition des demandes de stage</h5>
+    <canvas id="stageChart" height="100"></canvas>
+</div>
         <h2 class="text-center mb-4">Toutes les demandes de stage</h2>
 
         <div class="card shadow-sm p-4">
@@ -129,7 +138,22 @@ v4bn78
                 </tbody>
             </table>
         </div>
+
+<!-- 🔽 Pagination -->
+<div class="d-flex justify-content-center mt-4">
+    {{ $stages->links('pagination::bootstrap-4') }}
+</div>
+
+
     </div>     
+
+
+
+
+
+    </div>
+
+    
 
     <script>
     function afficherFormRejet(id) {
@@ -149,6 +173,38 @@ function toggleDetails(id) {
 }
 
     </script>
+
+    <!-- 📈 Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('stageChart').getContext('2d');
+    const stageChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['En attente', 'Validé', 'Rejeté'],
+            datasets: [{
+                label: 'Nombre de demandes',
+                data: [{{ $stats['en_attente'] }}, {{ $stats['valide'] }}, {{ $stats['rejete'] }}],
+                backgroundColor: ['#f0ad4e', '#5cb85c', '#d9534f'],
+                borderColor: ['#ec971f', '#4cae4c', '#c9302c'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
+</script>
 @endsection
 
 

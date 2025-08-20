@@ -44,9 +44,14 @@
                         <p><strong>Places :</strong> {{ $partenaire->nombre_places ?? '0' }}</p>
                         <p><strong>Niveau requis :</strong> {{ $partenaire->niveau_recherche ?? 'Non spécifié' }}</p>
                         <p><strong>Frais :</strong> {{ $partenaire->frais_stage ?? '0' }} Fcfa</p>
+                        <p><strong>Numero de depôt :</strong> {{ $partenaire->numero_payment }}</p>
                     </div>
 
+                  
+
                     <div class="text-center mt-2">
+
+                     
 
                     <!-- Icône "+" pour afficher les détails -->
                     <button class="btn btn-info btn-sm" onclick="toggleDetails('{{ $partenaire->id }}')">
@@ -60,6 +65,11 @@
             </div>
             @endforeach
         </div>
+ <!-- Pagination -->
+ <div class="d-flex justify-content-center mt-4">
+            {{ $partenaires->links('pagination::bootstrap-5') }}
+        </div>
+
     </div>
 
     <script>

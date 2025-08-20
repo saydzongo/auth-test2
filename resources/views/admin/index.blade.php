@@ -12,77 +12,81 @@
 @endif
 
 
-        @if(Auth::user()->role == 'admin')
+@if(Auth::user()->role == 'admin')
 <div class="row mt-4">
-    <!-- ✅ Carte : Créer un Partenaire -->
-    <div class="col-md-4">
-        <div class="card text-center p-3 shadow-lg hover-effect">
-            <i class="fas fa-handshake fa-3x text-primary"></i>
-            <h4 class="mt-2">Créer un Partenaire</h4>
-            <p><strong>{{ $nombrePartenaires }}</strong> partenaires existants</p>
-            <a href="{{ route('partenaires.create') }}" class="btn btn-primary mt-2">Ajouter</a>
+    <!-- Créer un partenaire -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-warning text-white mb-4 hover-effect">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <span><i class="fas fa-handshake me-2"></i>Créer un Partenaire</span>
+                <i class="fas fa-angle-right"></i>
+            </div>
+            <div class="card-footer text-white">
+                <a class="small text-white stretched-link" href="{{ route('partenaires.create') }}">Ajouter</a>
+            </div>
         </div>
     </div>
 
-    <!-- ✅ Carte : Tous les Stages -->
-    <div class="col-md-4">
-        <div class="card text-center p-3 shadow-lg hover-effect">
-            <i class="fas fa-list-alt fa-3x text-info"></i>
-            <h4 class="mt-2">Tous les Stages</h4>
-            <p><strong>{{ $nombreStages }}</strong> stages au total</p>
-            <a href="{{ route('admin.tous-stages') }}" class="btn btn-info mt-2">Voir</a>
+    <!-- Tous les stages -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-secondary text-white mb-4 hover-effect">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <span><i class="fas fa-list-alt me-2"></i>Tous les Stages</span>
+                <i class="fas fa-angle-right"></i>
+            </div>
+            <div class="card-footer text-white">
+                <a class="small text-white stretched-link" href="{{ route('admin.tous-stages') }}">Voir</a>
+            </div>
         </div>
     </div>
 
-    <!-- ✅ Carte : Stages Validés -->
-    <div class="col-md-4">
-        <div class="card text-center p-3 shadow-lg hover-effect">
-            <i class="fas fa-check-circle fa-3x text-success"></i>
-            <h4 class="mt-2">Stages Validés</h4>
-            <p><strong>{{ $nombreStagesValides }}</strong> stages validés</p>
-            <a href="{{ route('admin.stages-valides') }}" class="btn btn-success mt-2">Consulter</a>
+    <!-- Stages validés -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-success text-white mb-4 hover-effect">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <span><i class="fas fa-check-circle me-2"></i>Stages Validés</span>
+                <i class="fas fa-angle-right"></i>
+            </div>
+            <div class="card-footer text-white">
+                <a class="small text-white stretched-link" href="{{ route('admin.stages-valides') }}">Consulter</a>
+            </div>
         </div>
     </div>
 </div>
 @endif
-
 
 @if(Auth::user()->role == 'etudiant')
 <div class="row mt-4">
-    <!-- ✅ Carte : Demander un Stage -->
-    <div class="col-md-6">
-        <div class="card text-center p-3 shadow-lg hover-effect">
-            <i class="fas fa-briefcase fa-3x text-primary"></i>
-            <h4 class="mt-2">Faire une Demande</h4>
-            <p><strong>{{ $nombrePartenaires }}</strong> partenaires disponibles</p>
-            <p class="text-muted">💰 Stages payants : <strong>{{ $nombreStagesPayants }}</strong></p>
-            <p class="text-muted">🎓 Stages gratuits : <strong>{{ $nombreStagesGratuits }}</strong></p>            
-            <a href="{{ route('postuler') }}" class="btn btn-primary mt-2">Postuler</a>
+    <!-- Faire une Demande -->
+    <div class="col-xl-3 col-md-6 hover-effect">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <span><i class="fas fa-briefcase me-2"></i>Faire une Demande</span>
+                <i class="fas fa-angle-right"></i>
+            </div>
+            <div class="card-footer text-white">
+                <a class="small text-white stretched-link" href="{{ route('postuler') }}">Postuler</a>
+            </div>
         </div>
     </div>
 
-   <!-- ✅ Carte : Voir ses Demandes -->
-   <div class="col-md-6">
-        <div class="card text-center p-3 shadow-lg hover-effect">
-            <i class="fas fa-folder-open fa-3x text-info"></i>
-            <h4 class="mt-2">Mes Demandes</h4>
-            <p><strong>{{ $nombreDemandes }}</strong> demandes effectuées</p>
-            <p class="text-muted">🔵 {{ $nombreEnAttente }} en attente | ✅ {{ $nombreValides }} validées | ❌ {{ $nombreRejetes }} rejetées</p>
-            <a href="{{ route('mes-stages') }}" class="btn btn-info mt-2">Voir mes demandes</a>
+    <!-- Mes Demandes -->
+    <div class="col-xl-3 col-md-6 hover-effect">
+        <div class="card bg-info text-white mb-4">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <span><i class="fas fa-folder-open me-2"></i>Mes Demandes</span>
+                <i class="fas fa-angle-right"></i>
+            </div>
+            <div class="card-footer text-white">
+                <a class="small text-white stretched-link" href="{{ route('mes-stages') }}">Voir</a>
+            </div>
         </div>
     </div>
 </div>
 @endif
-
  
 
-        <!-- ✅ Graphique de répartition des stages -->
-        @if(Auth::user()->role == 'admin')
-        <div class="card p-3 shadow mt-4">
-            <h4 class="text-center">Répartition des Stages</h4>
-            <canvas id="stagesChart" width="400" height="200"></canvas>
-        </div>
-        @endif
+       
 
 
 
@@ -105,5 +109,6 @@
         });
     });
     </script>
+   
     
 @endsection

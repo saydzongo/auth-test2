@@ -25,13 +25,10 @@ class StageController extends Controller
     // Afficher la liste des partenaires
     public function index()
     {
-        $partenaires = Partenaire::all();
+        $partenaires = Partenaire::paginate(6);
         return view('dashboard.postuler', compact('partenaires'));
+        
     }
-    
-
-
-
 
 
     // Afficher le formulaire de candidature
@@ -94,13 +91,7 @@ class StageController extends Controller
         'parent_tuteur' => $request->parent_tuteur, 
         'numero_tuteur' => $request->numero_tuteur, 
 
-         /* 'numero_payment' => 'nullable|string|max:255',
-        'code_payment' => 'nullable|string|max:255',
-        'capture_payment' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
-      'numero_payment' => $request->type_stage === 'payant' ? 'nullable|string|max:255' : 'nullable',
-        'code_payment' => $request->type_stage === 'payant' ? 'nullable|string|max:255' : 'nullable',
-        'capture_payment' => $request->type_stage === 'payant' ? 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' : 'nullable',
-        */
+        
         'numero_payment' => $partenaire->type_stage === 'payant' ? $request->numero_payment : null,
         'code_payment' => $partenaire->type_stage === 'payant' ? $request->code_payment : null,
         'capture_payment' => $partenaire->type_stage === 'payant' && $request->hasFile('capture_payment') 
@@ -118,15 +109,6 @@ class StageController extends Controller
     }
 
 
-/* // ✅ Ajouter `user_id` automatiquement
-$data['user_id'] = $userId;
-$data['partenaire_id'] = $request->partenaire_id; // ✅ Ajout de `partenaire_id`
-
-// ✅ Stocker correctement `type_stage`
-$data['type_stage'] = $partenaire->type_stage;
-
-// ✅ Enregistrer la demande de stage avec les bonnes valeurs
-Stage::create($data);  */
 
     
 
@@ -138,16 +120,19 @@ Stage::create($data);  */
 
 
 
-/*public function mesStages()
-{
-    $stages = Stage::where('user_id', Auth::id())->get(); // Récupérer les candidatures de l'étudiant connecté
-    return view('dashboard.mes_stages', compact('stages')); // Afficher la bonne vue
-} */
+
 public function mesStages()
 {
     $etudiant = auth()->user();
-    $stages = Stage::where('user_id', $etudiant->id)->get();
-   return view('dashboard.mes_stages', compact('stages'));
+
+    // Ajout de la pagination ici
+    $stages = Stage::where('user_id', $etudiant->id)
+                   ->orderBy('created_at', 'desc') // Optionnel mais utile
+                   ->paginate(5); // ← Affiche 5 stages par page
+
+    return view('dashboard.mes_stages', compact('stages'));
+
+   
 }
 
 
@@ -160,7 +145,9 @@ public function mesStages()
 public function edit($id)
 {
     $stage = Stage::findOrFail($id);
-    return view('dashboard.edit_stage', compact('stage'));
+    $partenaire = $stage->partenaire; // ← On récupère le partenaire lié
+
+    return view('dashboard.edit_stage', compact('stage', 'partenaire'));
 }
 
 
@@ -195,9 +182,20 @@ public function destroy($id)
 
 public function tousLesStages()
 {
+    
+
     $this->authorizeForUser(auth()->user(), 'voir tous les stages');
-    $stages = Stage::with('partenaire', 'user')->orderBy('created_at', 'desc')->get();
-    return view('admin.tous_les_stages', compact('stages'));
+
+    $stages = Stage::with('partenaire', 'user')->orderBy('created_at', 'desc')->paginate(10);
+
+    // 📊 Statistiques
+    $stats = [
+        'en_attente' => Stage::where('statut', 'en attente')->count(),
+        'valide' => Stage::where('statut', 'validé')->count(),
+        'rejete' => Stage::where('statut', 'rejeté')->count(),
+    ];
+
+    return view('admin.tous_les_stages', compact('stages', 'stats'));
 }
 
 
@@ -239,12 +237,7 @@ public function valider($id)
     return redirect()->route('admin.tous-stages')->with('success', 'La demande de stage a été validée avec succès!');
 }
 
-/*public function demandesValidees()
-{
-    $stages = Stage::with('partenaire')->where('statut', 'validé')->orderBy('updated_at', 'desc')->get();
-    $stages_valides = StageValide::orderBy('date_validation', 'desc')->get();
-    return view('admin.stages_valides', compact('stages'));
-}  */
+
 
 public function demandesValidees()
 {

@@ -22,7 +22,16 @@ class Partenaire extends Model
         'nombre_places', 
         'niveau_recherche', 
          'type_stage',
-        'frais_stage'
+        'frais_stage',
+        'numero_payment'
     ];
     protected $table = 'partenaires';
+
+
+
+    public function stages()
+{
+    return $this->hasMany(Stage::class);
 }
+}
+
